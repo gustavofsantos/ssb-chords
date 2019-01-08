@@ -1,0 +1,32 @@
+{
+  "name": "ssb-chords",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-sbot": "ssb-server start --logging.level=info",
+    "start": "node index.js",
+    "test-tab": "mocha tests/tab.test.js",
+    "test-ssb-functions": "mocha tests/ssb-functions.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gustavofsantos/ssb-chords.git"
+  },
+  "author": "Gustavo Santos <gfdsantos@inf.ufpel.edu.br>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gustavofsantos/ssb-chords/issues"
+  },
+  "homepage": "https://github.com/gustavofsantos/ssb-chords#readme",
+  "dependencies": {
+    "pull-stream": "^3.6.9",
+    "scuttlebot-release": "^13.5.2",
+    "ssb-client": "^4.6.0",
+    "ssb-feed": "^2.3.0",
+    "ssb-keys": "^7.1.4"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
