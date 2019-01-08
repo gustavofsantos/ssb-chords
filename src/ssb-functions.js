@@ -49,7 +49,7 @@ function start() {
 
 function publish(data, cb) {
   if (ready) {
-    sbot.publish({
+    feed.publish({
       type: 'post',
       text: data,
       channel: 'ssb-chords'
@@ -63,22 +63,11 @@ function publish(data, cb) {
 function search(query, cb) {
   if (ready) {
     pull(
-      sbot.query.read({
-        query: [
-          // {$filter: {
-          //   value: { content: { channel: 'test-ssb-chords' } }
-          // }},
-          {$filter: query}
-        ]
-      }),
-      pull.collect((err, ary) => {
-        if (!err) {
-          console.log(ary);
-          cb(null, ary);
-        } else {
-          console.error(err);
-          cb(err, null);
-        }
+      sbot.createFeedStream(),
+      pull.filter(msg => 
+        msg.value.content && msg.value.content.channel === 'ssb-chord'),
+      pull.drain(msg => {
+        console.log(msg);
       })
     );
   } else {
