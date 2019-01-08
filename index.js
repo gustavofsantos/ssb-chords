@@ -13,7 +13,7 @@ ssbFunctions.onReady(() => {
   //     console.error(err);
   //   }
   // })
-  ssbFunctions.search(null, (err, res) => {
+  ssbFunctions.search('Queen', (err, res) => {
     console.log(res);
   })
 });

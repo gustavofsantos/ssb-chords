@@ -1,6 +1,7 @@
 const ssbClient = require('ssb-client');
 const ssbKeys = require('ssb-keys');
 const ssbFeed = require('ssb-feed');
+const mfr = require('map-filter-reduce');
 const pull = require('pull-stream');
 const EventEmitter = require('events');
 
@@ -11,6 +12,7 @@ const user = ssbKeys.generate();
 
 const eventBus = new EventBus();
 let sbot = null;
+let feed = null;
 let ready = false;
 
 /**
@@ -36,9 +38,8 @@ function onError(done) {
 function start() {
   ssbClient((err, ssbServer) => {
     if (!err && ssbServer) {
-      const feed = ssbFeed(ssbServer, user)
-
-      sbot = feed;
+      feed = ssbFeed(ssbServer, user);
+      sbot = ssbServer;
       eventBus.emit('ready');
     } else {
       eventBus.emit('error', err);
@@ -51,7 +52,7 @@ function publish(data, cb) {
     sbot.publish({
       type: 'post',
       text: data,
-      channel: 'test-ssb-chords'
+      channel: 'ssb-chords'
     }, cb);
   } else {
     eventBus.emit('error', 'The Scuttlebot client is not ready yet.');
@@ -64,9 +65,10 @@ function search(query, cb) {
     pull(
       sbot.query.read({
         query: [
-          {$filter: {
-            value: { content: { channel: 'test-ssb-chords' } }
-          }}
+          // {$filter: {
+          //   value: { content: { channel: 'test-ssb-chords' } }
+          // }},
+          {$filter: query}
         ]
       }),
       pull.collect((err, ary) => {
